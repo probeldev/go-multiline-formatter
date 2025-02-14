@@ -3,8 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"go_multiline_formatter/formatter"
 	"os"
+
+	"github.com/probeldev/go-multiline-formatter/formatter"
 )
 
 func main() {
