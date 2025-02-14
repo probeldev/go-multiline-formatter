@@ -27,7 +27,7 @@
 
 что бы использовать hotkey(пробел + f) необходимо в ~/.config/nvim/init.vim добавить:
 
-    vnoremap <space>f :'<,'>!go-multiline-formatter \| gofmt<CR>
+    vnoremap <space>f :'<,'>!go-multiline-formatter<CR>
 
 
 
