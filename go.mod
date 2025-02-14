@@ -1,3 +1,3 @@
-module go_multiline_formatter
+module go-multiline-formatter
 
 go 1.23.6
