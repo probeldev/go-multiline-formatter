@@ -1,4 +1,4 @@
-# go-multiline-formatter
+# Go Multiline Formatter
 
 Форматер для neovim что бы преобразовывать однострочные конструкции в языке GO в многострочные
 
