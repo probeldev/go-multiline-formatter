@@ -147,6 +147,28 @@ func TestOneLine2MultiLineRunFunc(
 	}
 }
 
+func TestOneLine2MultiLineRunFunc2(
+	t *testing.T,
+) {
+	formatter := GetFormatter()
+
+	input := "a, b := myfunc(a, b, c)"
+
+	actual := formatter.OneLine2MultiLine(input)
+
+	expected := `a, b := myfunc(
+	a,
+	b,
+	c,
+)`
+
+	if actual != expected {
+		t.Error("actual != expected")
+		t.Error("\n", actual)
+		t.Error("\n", expected)
+	}
+}
+
 func TestOneLine2MultiLineRunFunc3(
 	t *testing.T,
 ) {
@@ -173,18 +195,25 @@ func TestOneLine2MultiLineRunFunc3(
 		t.Error("\n", expected)
 	}
 }
-func TestOneLine2MultiLineRunFunc2(
+
+func TestOneLine2MultiLineRunFunc4(
 	t *testing.T,
 ) {
 	formatter := GetFormatter()
 
-	input := "a, b := myfunc(a, b, c)"
+	input := `a, b := myfunc(a, b, func(c int, b int,){
+		log.Println(c, b)
+	}, c)`
 
 	actual := formatter.OneLine2MultiLine(input)
 
 	expected := `a, b := myfunc(
 	a,
 	b,
+	func(c int, b int) {
+		d := c + b
+		log.Println(d)
+	},
 	c,
 )`
 
