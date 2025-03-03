@@ -2,6 +2,8 @@ package formatter
 
 import (
 	"strings"
+
+	"github.com/probeldev/go-multiline-formatter/parser"
 )
 
 type formatter struct{}
@@ -16,12 +18,14 @@ func (f *formatter) OneLine2MultiLine(
 	l string,
 ) string {
 
-	isStructFunc := f.isStuctFunc(l)
+	funcParser := parser.GetFunctionParser()
+
+	isStructFunc := funcParser.IsStuctFunc(l)
 	structFromFunc := ""
 	declaration := ""
 
 	if isStructFunc {
-		structFromFunc = f.getStructFromFunc(l)
+		structFromFunc = funcParser.GetStructFromFunc(l)
 		l = f.removeStructFromFunc(l)
 	}
 
@@ -52,29 +56,12 @@ func (f *formatter) formateOneLineToMultiLine(
 	return l
 }
 
-func (f *formatter) isStuctFunc(
-	l string,
-) bool {
-	l = strings.ReplaceAll(l, " ", "")
-
-	return strings.HasPrefix(l, "func(")
-}
-
-func (f *formatter) getStructFromFunc(
-	l string,
-) string {
-	arr := strings.Split(l, "(")
-	l = arr[1]
-	arr = strings.Split(l, ")")
-	l = arr[0]
-
-	return "(" + l + ")"
-}
-
 func (f *formatter) removeStructFromFunc(
 	l string,
 ) string {
-	structFromFunc := f.getStructFromFunc(l)
+	funcParser := parser.GetFunctionParser()
+
+	structFromFunc := funcParser.GetStructFromFunc(l)
 	l = strings.ReplaceAll(l, structFromFunc, "{{FUNC_STRUCT}}")
 
 	return l
