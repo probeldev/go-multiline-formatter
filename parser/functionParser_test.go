@@ -40,3 +40,31 @@ func TestIsStuctFunc2(
 	}
 
 }
+
+func TestGetFuncName(
+	t *testing.T,
+) {
+	input := `func myfunc() {`
+
+	expected := "myfunc"
+
+	actual := GetFunctionParser().GetFuncName(input)
+
+	if actual != expected {
+		t.Error("actual != expected")
+	}
+}
+
+func TestGetFuncName2(
+	t *testing.T,
+) {
+	input := `func (s *mystruct) myfunc() {`
+
+	expected := "myfunc"
+
+	actual := GetFunctionParser().GetFuncName(input)
+
+	if actual != expected {
+		t.Error("actual != expected")
+	}
+}

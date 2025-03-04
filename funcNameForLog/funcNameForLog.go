@@ -30,9 +30,10 @@ func (f *funcNameForLog) AddFuncName(
 		response += ":"
 	}
 
-	// TODO
+	response += parserFunc.GetFuncName(body)
 
 	response += `"`
+	response += "\n"
 
 	return response
 }
