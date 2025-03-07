@@ -1,33 +1,56 @@
 # Go Multiline Formatter
 
-Форматер для NeoVim что бы преобразовывать однострочные конструкции в языке GO в многострочные
+Помошник для редактирования кода на языке go для Vim/NeoVim/Emacs
 
-Например:
+
+## Возможности
+
+### Преобразование однострочной функции в многострочную
+
+Используется флаг: 
+
+    -multiline
+
+Пример работы:
 
     func myfunc(a int, b int, c int) error {
 
-Преобразуется в 
+Преобразуется в:
 
     func myfunc(
         a int,
         b int,
         c int,
     ) error {
+    
 
+### Добавление переменной с названием структуры и функции
 
-# Установка
+Исользуется флаг
+    
+    -logfunc
+    
+Пример работы:
+
+    func (s *structname) myfunc(a int, b int, c int) error {
+    
+Преобразуется в:
+
+    func (s *structname) myfunc(a int, b int, c int) error {
+        fn :="structname:myfunc"
+    
+
+## Установка
 
      go install github.com/probeldev/go-multiline-formatter@latest
 
-# Использование в NeoVim
+## Использование в Vim/NeoVim
 
 1. Выделить строку
 
 2. использовать комманду !go-multiline-formatter 
 
-что бы использовать hotkey(пробел + f) необходимо в ~/.config/nvim/init.vim добавить:
+что бы использовать hotkey(пробел + f и пробел + l) необходимо в ~/.config/nvim/init.vim добавить:
 
-    vnoremap <space>f :'<,'>!go-multiline-formatter<CR>
-
-
-
+    vnoremap <space>f :'<,'>!go-multiline-formatter -multiline<CR>
+    vnoremap <space>l :'<,'>!go-multiline-formatter -logfunc<CR>
