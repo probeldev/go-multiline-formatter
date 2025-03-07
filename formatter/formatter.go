@@ -26,7 +26,7 @@ func (f *formatter) OneLine2MultiLine(
 
 	if isStructFunc {
 		structFromFunc = funcParser.GetStructFromFunc(l)
-		l = f.removeStructFromFunc(l)
+		l = funcParser.RemoveStructFromFunc(l, true)
 	}
 
 	declaration = f.getDeclarationVariable(l)
@@ -52,17 +52,6 @@ func (f *formatter) formateOneLineToMultiLine(
 	l = strings.ReplaceAll(l, ",", ",\n\t")
 	l = strings.ReplaceAll(l, ")", ",\n)")
 	l = strings.ReplaceAll(l, "\t ", "\t")
-
-	return l
-}
-
-func (f *formatter) removeStructFromFunc(
-	l string,
-) string {
-	funcParser := parser.GetFunctionParser()
-
-	structFromFunc := funcParser.GetStructFromFunc(l)
-	l = strings.ReplaceAll(l, structFromFunc, "{{FUNC_STRUCT}}")
 
 	return l
 }

@@ -11,13 +11,19 @@ func TestAddFuncName(
 	input := "func myfunc() {"
 
 	expected := `func myfunc() {
-	fn:="myfunc"
+	fn := "myfunc"
 `
 
 	actual := GetFuncNameForLog().AddFuncName(input)
 
 	if actual != expected {
-		t.Error("actual != expected")
+		t.Error(
+			"actual != expected",
+			"\nactual:\n",
+			actual,
+			"\nexpected:\n",
+			expected,
+		)
 	}
 }
 
@@ -28,12 +34,18 @@ func TestAddFuncName2(
 	input := "func (s *structname) myfunc() {"
 
 	expected := `func (s *structname) myfunc() {
-	fn:="structname:myfunc"
+	fn := "structname:myfunc"
 `
 	actual := GetFuncNameForLog().AddFuncName(input)
 
 	if actual != expected {
-		t.Error("actual != expected")
+		t.Error(
+			"actual != expected",
+			"\nactual:\n",
+			actual,
+			"\nexpected:\n",
+			expected,
+		)
 	}
 }
 
@@ -58,11 +70,17 @@ func TestAddFuncName3(
 	int,
 	error,
 ) {
-	fn:="structname:myfunc"
+	fn := "structname:myfunc"
 `
 	actual := GetFuncNameForLog().AddFuncName(input)
 
 	if actual != expected {
-		t.Error("actual != expected")
+		t.Error(
+			"actual != expected",
+			"\nactual:\n",
+			actual,
+			"\nexpected:\n",
+			expected,
+		)
 	}
 }

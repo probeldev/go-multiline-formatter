@@ -1,6 +1,10 @@
 package funcnameforlog
 
-import "github.com/probeldev/go-multiline-formatter/parser"
+import (
+	"log"
+
+	"github.com/probeldev/go-multiline-formatter/parser"
+)
 
 type funcNameForLog struct{}
 
@@ -13,6 +17,8 @@ func GetFuncNameForLog() *funcNameForLog {
 func (f *funcNameForLog) AddFuncName(
 	body string,
 ) string {
+	fn := "funcNameForLog:AddFuncName"
+
 	response := body
 
 	parserFunc := parser.GetFunctionParser()
@@ -21,11 +27,15 @@ func (f *funcNameForLog) AddFuncName(
 		return response
 	}
 
-	response += "\n"
-	response += `fn :="`
+	response += "\n\t"
+	response += `fn := "`
 
 	if parserFunc.IsStuctFunc(body) {
-		structFromFunc := parserFunc.GetStructFromFunc(body)
+		structFromFunc, err := parserFunc.GetOnlyStructureNameFromFunc(body)
+		if err != nil {
+			log.Println(fn, err)
+			return ""
+		}
 		response += structFromFunc
 		response += ":"
 	}
