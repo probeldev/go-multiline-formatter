@@ -52,18 +52,25 @@ func (f *formatter) OneLine2MultiLine(
 }
 
 func (f *formatter) formateOneLineToMultiLine(l string) string {
-	// Обрабатываем параметры функции
+	// 1. Обрабатываем открывающую скобку параметров
 	l = strings.Replace(l, "(", "(\n\t", 1)
+
+	// 2. Обрабатываем запятые между параметрами
 	l = strings.ReplaceAll(l, ", ", ",\n\t")
 
-	// Обрабатываем возвращаемые значения
+	// 3. Специальная обработка для возвращаемых значений
 	if strings.Contains(l, ") (") {
-		l = strings.Replace(l, ") (", ",\n) (\n\t", 1)
-	} else if strings.Contains(l, ")(") {
-		l = strings.Replace(l, ")(", ",\n) (\n\t", 1)
+		// Случай с возвращаемыми значениями в скобках
+		parts := strings.SplitN(l, ") (", 2)
+		parts[0] = parts[0] + ",\n)"
+		parts[1] = "(\n\t" + parts[1]
+		l = parts[0] + " " + parts[1]
+	} else if strings.Contains(l, ")") {
+		// Общий случай для закрывающей скобки
+		l = strings.Replace(l, ")", ",\n)", 1)
 	}
 
-	// Закрывающая скобка
+	// 4. Обрабатываем фигурную скобку
 	l = strings.Replace(l, ") {", ",\n) {", 1)
 
 	return l
