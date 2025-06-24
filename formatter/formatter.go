@@ -22,36 +22,49 @@ func (f *formatter) OneLine2MultiLine(
 
 	isStructFunc := funcParser.IsStuctFunc(l)
 	structFromFunc := ""
-	declaration := ""
 
 	if isStructFunc {
 		structFromFunc = funcParser.GetStructFromFunc(l)
 		l = funcParser.RemoveStructFromFunc(l, true)
 	}
 
-	declaration = f.getDeclarationVariable(l)
+	l = f.removeDoubleSpaces(l)
+	l = strings.TrimSpace(l)
 
-	l = f.removeDeclarationVariable(l)
-
-	l = f.formateOneLineToMultiLine(l)
+	// Проверяем, есть ли объявление с =
+	if strings.Contains(l, "=") {
+		declaration := f.getDeclarationVariable(l)
+		l = f.removeDeclarationVariable(l)
+		l = f.formateOneLineToMultiLine(l)
+		l = strings.ReplaceAll(l, "{{DECLARATION}}", declaration)
+	} else {
+		// Если нет =, обрабатываем как чистую функцию
+		l = f.formateOneLineToMultiLine(l)
+	}
 
 	if isStructFunc {
 		l = strings.ReplaceAll(l, "{{FUNC_STRUCT}}", structFromFunc)
 	}
-	l = strings.ReplaceAll(l, "{{DECLARATION}}", declaration)
 
 	l = f.removeDoubleSpaces(l)
 
 	return l
 }
 
-func (f *formatter) formateOneLineToMultiLine(
-	l string,
-) string {
-	l = strings.ReplaceAll(l, "(", "(\n\t")
-	l = strings.ReplaceAll(l, ",", ",\n\t")
-	l = strings.ReplaceAll(l, ")", ",\n)")
-	l = strings.ReplaceAll(l, "\t ", "\t")
+func (f *formatter) formateOneLineToMultiLine(l string) string {
+	// Обрабатываем параметры функции
+	l = strings.Replace(l, "(", "(\n\t", 1)
+	l = strings.ReplaceAll(l, ", ", ",\n\t")
+
+	// Обрабатываем возвращаемые значения
+	if strings.Contains(l, ") (") {
+		l = strings.Replace(l, ") (", ",\n) (\n\t", 1)
+	} else if strings.Contains(l, ")(") {
+		l = strings.Replace(l, ")(", ",\n) (\n\t", 1)
+	}
+
+	// Закрывающая скобка
+	l = strings.Replace(l, ") {", ",\n) {", 1)
 
 	return l
 }
@@ -59,7 +72,9 @@ func (f *formatter) formateOneLineToMultiLine(
 func (f *formatter) removeDoubleSpaces(
 	l string,
 ) string {
-	l = strings.ReplaceAll(l, "  ", " ")
+	for strings.Contains(l, "  ") {
+		l = strings.ReplaceAll(l, "  ", " ")
+	}
 	return l
 }
 
