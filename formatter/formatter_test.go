@@ -176,6 +176,31 @@ func TestOneLine2MultiLineRunFunc2(
 // 	}
 // }
 
+func TestOneLine2MultiLineRunFunc4(
+	t *testing.T,
+) {
+	formatter := GetFormatter()
+
+	input := `err = stmt.QueryRow(deal.Name, deal.Number).Scan(&ldeal.Id, &ldeal.Name, &ldeal.Number)`
+
+	actual := formatter.OneLine2MultiLine(input)
+
+	expected := `err = stmt.QueryRow(
+	deal.Name,
+	deal.Number,
+).Scan(
+	&ldeal.Id,
+	&ldeal.Name,
+	&ldeal.Number,
+)`
+
+	if actual != expected {
+		t.Error("actual != expected")
+		t.Error("\n", actual)
+		t.Error("\n", expected)
+	}
+}
+
 // func TestOneLine2MultiLineIf(
 // 	t *testing.T,
 // ) {

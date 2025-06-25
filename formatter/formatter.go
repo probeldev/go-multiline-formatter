@@ -51,9 +51,20 @@ func (f *formatter) OneLine2MultiLine(
 	return l
 }
 
+func (f *formatter) removeEmptyLines(s string) string {
+	lines := strings.Split(s, "\n")
+	var nonEmptyLines []string
+	for _, line := range lines {
+		if strings.TrimSpace(line) != "" {
+			nonEmptyLines = append(nonEmptyLines, line)
+		}
+	}
+	return strings.Join(nonEmptyLines, "\n")
+}
+
 func (f *formatter) formateOneLineToMultiLine(l string) string {
 	// 1. Обрабатываем открывающую скобку параметров
-	l = strings.Replace(l, "(", "(\n\t", 1)
+	l = strings.ReplaceAll(l, "(", "(\n\t")
 
 	// 2. Обрабатываем запятые между параметрами
 	l = strings.ReplaceAll(l, ", ", ",\n\t")
@@ -67,11 +78,13 @@ func (f *formatter) formateOneLineToMultiLine(l string) string {
 		l = parts[0] + " " + parts[1]
 	} else if strings.Contains(l, ")") {
 		// Общий случай для закрывающей скобки
-		l = strings.Replace(l, ")", ",\n)", 1)
+		l = strings.ReplaceAll(l, ")", ",\n)")
 	}
 
 	// 4. Обрабатываем фигурную скобку
-	l = strings.Replace(l, ") {", ",\n) {", 1)
+	l = strings.ReplaceAll(l, ") {", ",\n) {")
+
+	l = f.removeEmptyLines(l)
 
 	return l
 }
