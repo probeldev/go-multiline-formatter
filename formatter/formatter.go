@@ -31,6 +31,8 @@ func (f *formatter) OneLine2MultiLine(
 	l = f.removeDoubleSpaces(l)
 	l = strings.TrimSpace(l)
 
+	l = strings.ReplaceAll(l, "()", "{{PARENTHESES}}")
+
 	// Проверяем, есть ли объявление с =
 	if strings.Contains(l, "=") {
 		declaration := f.getDeclarationVariable(l)
@@ -47,6 +49,7 @@ func (f *formatter) OneLine2MultiLine(
 	}
 
 	l = f.removeDoubleSpaces(l)
+	l = strings.ReplaceAll(l, "{{PARENTHESES}}", "()")
 
 	return l
 }
